@@ -14,7 +14,7 @@ export default function Document() {
         <meta name="msapplication-TileColor" content="#000000" />
         <meta name="msapplication-tap-highlight" content="no" />
         <meta name="theme-color" content="#FFFFFF" />
-        <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
         <link rel="manifest" href="/manifest.json" />
       </Head>
       <body>
