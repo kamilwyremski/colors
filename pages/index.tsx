@@ -12,6 +12,7 @@ export default function Home() {
     >
       <Head>
         <title>HEX to RGB converter and Contrast Checker</title>
+        <link rel="icon" type="image/x-icon" href="/icons/icon-512x512.png"></link>
       </Head>
       <div className="w-full max-w-5xl">
         <Converter />

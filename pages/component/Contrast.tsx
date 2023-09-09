@@ -173,7 +173,7 @@ export default function Contrast() {
           </p>
         </div>
         <div className="lg:w-2/3">
-          <p className="m-3 p-1 text-lg" style={{'color': foreground, 'backgroundColor': background}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+          <p className="m-3 p-1 text-lg font-bold" style={{'color': foreground, 'backgroundColor': background}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
         </div>
       </div>
       <p>

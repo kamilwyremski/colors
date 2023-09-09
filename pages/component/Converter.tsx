@@ -1,5 +1,5 @@
-import { useState } from "react";
-import {labelClass, inputClass} from '../css.class.js';
+import { useEffect, useState } from "react";
+import {labelClass, inputClass, buttonClass} from '../css.class.js';
 
 export default function Converter() {
 
@@ -8,6 +8,7 @@ export default function Converter() {
   const [r, setR] = useState<number | undefined>(255);
   const [g, setG] = useState<number | undefined>(255);
   const [b, setB] = useState<number | undefined>(255);
+  const [clipboardAlert, setClipboardAlert] = useState(false);
 
   function hexToRgb(hex: string) {
     const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
@@ -113,8 +114,30 @@ export default function Converter() {
     }
   };
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setClipboardAlert(false);
+    }, 2000);
+
+    return () => clearInterval(intervalId);
+  }, [clipboardAlert]);
+
+  function copyToclipboard (value: string | undefined) {
+    if(value){
+      navigator.clipboard.writeText(value);
+      setClipboardAlert(true);
+    }
+  }
+
   return (
     <>
+      {clipboardAlert && (
+      <div
+        className="fixed bottom-10 right-10 z-[10] rounded bg-black px-6 py-3 text-zinc-100"
+        role="alert">
+        Text copied!
+      </div>
+      )}
       <h2 className="text-4xl font-bold dark:text-white mb-2">
         RGB to HEX converter
       </h2>
@@ -123,26 +146,32 @@ export default function Converter() {
           <label htmlFor="rgb" className={`${labelClass}`}>
             RGB(a)
           </label>
-          <input
-            type="text"
-            id="rgb"
-            className={`${inputClass}`}
-            value={rgb}
-            onChange={(e) => setRgbHandler(e.target.value)}
-          />
+          <div className="flex">
+            <input
+              type="text"
+              id="rgb"
+              className={`${inputClass} me-1`}
+              value={rgb}
+              onChange={(e) => setRgbHandler(e.target.value)}
+            />
+            <button className={`${buttonClass}`} onClick={() => copyToclipboard(rgb)}>Copy</button>
+          </div>
         </div>
         <div className="flex-1 mb-2">
           <label htmlFor="hex" className={`${labelClass}`}>
             HEX
           </label>
-          <input
-            type="text"
-            id="hex"
-            className={`${inputClass}`}
-            value={hex}
-            onChange={(e) => setHexHandler(e.target.value)}
-            maxLength={7}
-          />
+          <div className="flex">
+            <input
+              type="text"
+              id="hex"
+              className={`${inputClass} me-1`}
+              value={hex}
+              onChange={(e) => setHexHandler(e.target.value)}
+              maxLength={7}
+            />
+            <button className={`${buttonClass}`} onClick={() => copyToclipboard(hex)}>Copy</button>
+          </div>
         </div>
       </div>
       <div className="sm:flex mb-16 gap-3">
