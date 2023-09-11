@@ -68,6 +68,7 @@ export default function Contrast() {
       <h2 className="text-4xl font-bold dark:text-white mb-2">
         Contrast Checker
       </h2>
+      <p className="mb-2">Check whether the text and background color complies with the WCAG AA standard and the WCAG AAA standard.</p>
       <div className="sm:flex gap-3">
         <div className="flex-1 mb-2">
           <label htmlFor="foreground" className={`${labelClass}`}>
@@ -78,6 +79,7 @@ export default function Contrast() {
               <input
                 type="text"
                 id="foreground"
+                data-testid="foreground"
                 className={`${inputClass}`}
                 value={foreground}
                 onChange={(e) => setForegroundHandler(e.target.value)}
@@ -104,6 +106,7 @@ export default function Contrast() {
               <input
                 type="text"
                 id="background"
+                data-testid="background"
                 className={`${inputClass}`}
                 value={background}
                 onChange={(e) => setBackgroundHandler(e.target.value)}
@@ -122,16 +125,16 @@ export default function Contrast() {
           </div>
         </div>
       </div>
-      <h3 className="text-xl font-bold dark:text-slate-300 dark:border-slate-300 border-gray-500 text-gray-500 mt-2 mb-2 border-2 p-2 inline-block">
+      <h3 className="text-xl font-bold dark:text-slate-300 dark:border-slate-300 border-gray-500 text-gray-500 mt-2 mb-2 border-2 p-2 inline-block" data-testid="contrast-ratio">
         Contrast ratio:{" "}
         {contrastRatio
           ? `${Math.round(contrastRatio * 100) / 100}:1`
-          : "wrong color"}
+          : "Invalid color"}
       </h3>
       <div className="lg:flex mb-2">
         <div className="lg:w-1/3">
           <h4 className="text-lg dark:text-slate-300 text-gray-500 mb-1">Normal Text</h4>
-          <p className="mb-1">
+          <p className="mb-1" data-testid="aa-normal">
             WCAG AA:{" "}
             {contrastRatio && +contrastRatio >= 4.5 ? (
               <span className={`${badgeGreen}`}>OK</span>
@@ -139,7 +142,7 @@ export default function Contrast() {
               <span className={`${badgeRed}`}>FAIL</span>
             )}
           </p>
-          <p className="mb-1">
+          <p className="mb-1" data-testid="aaa-normal">
             WCAG AAA:{" "}
             {contrastRatio && +contrastRatio >= 7 ? (
               <span className={`${badgeGreen}`}>OK</span>
@@ -155,7 +158,7 @@ export default function Contrast() {
       <div className="lg:flex mb-3">
         <div className="lg:w-1/3">
           <h4 className="text-lg dark:text-slate-300 text-gray-500 mb-1">Large Text</h4>
-          <p className="mb-1">
+          <p className="mb-1" data-testid="aa-large">
             WCAG AA:{" "}
             {contrastRatio && +contrastRatio >= 3 ? (
               <span className={`${badgeGreen}`}>OK</span>
@@ -163,7 +166,7 @@ export default function Contrast() {
               <span className={`${badgeRed}`}>FAIL</span>
             )}
           </p>
-          <p className="mb-1">
+          <p className="mb-1" data-testid="aaa-large">
             WCAG AAA:{" "}
             {contrastRatio && +contrastRatio >= 4.5 ? (
               <span className={`${badgeGreen}`}>OK</span>

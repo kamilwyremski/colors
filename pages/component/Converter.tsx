@@ -141,6 +141,7 @@ export default function Converter() {
       <h2 className="text-4xl font-bold dark:text-white mb-2">
         RGB to HEX converter
       </h2>
+      <p className="mb-2">Quickly convert colors from rgb(a) to HEX and vice versa.</p>
       <div className="sm:flex gap-3">
         <div className="flex-1 mb-2">
           <label htmlFor="rgb" className={`${labelClass}`}>
@@ -150,6 +151,7 @@ export default function Converter() {
             <input
               type="text"
               id="rgb"
+              data-testid="rgb"
               className={`${inputClass} me-1`}
               value={rgb}
               onChange={(e) => setRgbHandler(e.target.value)}
@@ -165,6 +167,7 @@ export default function Converter() {
             <input
               type="text"
               id="hex"
+              data-testid="hex"
               className={`${inputClass} me-1`}
               value={hex}
               onChange={(e) => setHexHandler(e.target.value)}
@@ -184,6 +187,7 @@ export default function Converter() {
               <input
                 type="number"
                 id="r"
+                data-testid="r"
                 min="0"
                 max="255"
                 className={`${inputClass}`}
@@ -198,6 +202,7 @@ export default function Converter() {
               <input
                 type="number"
                 id="g"
+                data-testid="g"
                 min="0"
                 max="255"
                 className={`${inputClass}`}
@@ -212,6 +217,7 @@ export default function Converter() {
               <input
                 type="number"
                 id="b"
+                data-testid="b"
                 min="0"
                 max="255"
                 className={`${inputClass}`}
@@ -228,6 +234,7 @@ export default function Converter() {
           <input
             type="color"
             id="preview"
+            data-testid="preview"
             className={`${inputClass} p-1 h-10`}
             value={hex}
             onChange={(e) => setHexHandler(e.target.value)}

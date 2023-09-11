@@ -8,3 +8,7 @@ export const buttonClass = "bg-black hover:bg-gray-800 text-zinc-100 font-semibo
 export const badgeRed = "bg-red-100 text-red-800 p-1 rounded dark:bg-red-900 dark:text-red-300";
 
 export const badgeGreen = "bg-green-100 text-green-800 p-1 rounded dark:bg-green-900 dark:text-green-300";
+
+export default function cssClass() {
+  return <>{/* nothing */}</>;
+}
