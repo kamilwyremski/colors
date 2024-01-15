@@ -165,7 +165,10 @@ export default function Converter() {
           type="checkbox"
           id="rgba"
           checked={rgba}
-          onChange={(e) => setRgba(e.target.checked)}
+          onChange={(e) => {
+            setFieldActive("rgba");
+            setRgba(e.target.checked);
+          }}
           className="form-checkbox h-4 w-4 text-blue-500"
           data-testid="rgba"
         />
