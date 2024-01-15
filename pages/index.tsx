@@ -12,14 +12,28 @@ export default function Home() {
     >
       <Head>
         <title>HEX to RGB converter and Contrast Checker</title>
-        <link rel="icon" type="image/x-icon" href="/icons/icon-512x512.png"></link>
+        <link
+          rel="icon"
+          type="image/x-icon"
+          href="/icons/icon-512x512.png"
+        ></link>
       </Head>
       <div className="w-full max-w-5xl">
         <Converter />
         <Contrast />
-        <p className="mb-10">This project is Open Source. You can see source code here: <a href="https://github.com/kamilwyremski/colors" target="_blank" rel="nofollow noopener" title="Colors in GiHub">https://github.com/kamilwyremski/colors</a></p>
+        <p className="mb-10">
+          This project is Open Source. You can see source code here:{" "}
+          <a
+            href="https://github.com/kamilwyremski/colors"
+            target="_blank"
+            rel="nofollow noopener"
+            title="Colors in GiHub"
+          >
+            https://github.com/kamilwyremski/colors
+          </a>
+        </p>
         <p className="text-sm">
-          Project 2023 by{" "}
+          Project 2023 - 2024 by{" "}
           <a href="http://wyremski.pl/en" title="Web Developer">
             Kamil Wyremski
           </a>

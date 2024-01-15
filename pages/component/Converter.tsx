@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react";
-import {labelClass, inputClass, buttonClass} from '../css.class.js';
+import { useCallback, useEffect, useState } from "react";
+import { labelClass, inputClass, buttonClass } from "../css.class.js";
 
 export default function Converter() {
-
-  const [rgb, setRgb] = useState("rgb(255,255,255)");
+  const [rgba, setRgba] = useState(false);
+  const [rgb, setRgb] = useState("rgb(255, 255, 255)");
   const [hex, setHex] = useState<string | undefined>("#FFFFFF");
   const [r, setR] = useState<number | undefined>(255);
   const [g, setG] = useState<number | undefined>(255);
   const [b, setB] = useState<number | undefined>(255);
+  const [a, setA] = useState<GLfloat | undefined>(1);
+  const [fieldActive, setFieldActive] = useState<string | undefined>("");
   const [clipboardAlert, setClipboardAlert] = useState(false);
 
   function hexToRgb(hex: string) {
@@ -30,11 +32,31 @@ export default function Converter() {
     return hex.length == 1 ? "0" + hex : hex;
   };
 
-  const rgbToHex = (r: number, g: number, b: number) =>
-    "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+  const rgbToHex = useCallback(
+    (r: number, g: number, b: number) =>
+      "#" + componentToHex(r) + componentToHex(g) + componentToHex(b),
+    []
+  );
 
   const isNumber = (value?: string | number): boolean =>
     value != null && value !== "" && !isNaN(Number(value.toString()));
+
+  useEffect(() => {
+    if (fieldActive !== "rgb") {
+      if (rgba) {
+        setRgb(`rgba(${r}, ${g}, ${b}, ${a})`);
+      } else {
+        setRgb(`rgb(${r}, ${g}, ${b})`);
+      }
+    }
+    if (fieldActive !== "hex") {
+      setHex(
+        isNumber(r) && isNumber(g) && isNumber(b)
+          ? rgbToHex(r || 0, g || 0, b || 0)
+          : undefined
+      );
+    }
+  }, [rgba, r, g, b, a, rgbToHex, fieldActive]);
 
   const setRgbHandler = (value: string) => {
     setRgb(value);
@@ -49,9 +71,15 @@ export default function Converter() {
       setR(nums[0]);
       setG(nums[1]);
       setB(nums[2]);
-      setHex(rgbToHex(nums[0], nums[1], nums[2]));
+      setA(nums[3] ? (nums[3] > 1 ? 1 : nums[3] < 0 ? 0 : nums[3]) : 1);
+    }
+  };
+
+  const setRgbHandlerBlur = () => {
+    if (/^rgba/.test(rgb)) {
+      setRgba(true);
     } else {
-      setHex(undefined);
+      setRgba(false);
     }
   };
 
@@ -63,7 +91,6 @@ export default function Converter() {
     setHex(value);
     const rgb = hexToRgb(value);
     if (rgb) {
-      setRgb(`rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`);
       setR(rgb.r);
       setG(rgb.g);
       setB(rgb.b);
@@ -80,10 +107,6 @@ export default function Converter() {
       r = 0;
     }
     setR(r);
-    if (r != undefined && g != undefined && b != undefined) {
-      setRgb(`rgb(${r}, ${g}, ${b})`);
-      setHex(rgbToHex(r, g, b));
-    }
   };
 
   const setGHandler = (value: string) => {
@@ -94,10 +117,6 @@ export default function Converter() {
       g = 0;
     }
     setG(g);
-    if (r != undefined && g != undefined && b != undefined) {
-      setRgb(`rgb(${r}, ${g}, ${b})`);
-      setHex(rgbToHex(r, g, b));
-    }
   };
 
   const setBHandler = (value: string) => {
@@ -108,10 +127,6 @@ export default function Converter() {
       b = 0;
     }
     setB(b);
-    if (r != undefined && g != undefined && b != undefined) {
-      setRgb(`rgb(${r}, ${g}, ${b})`);
-      setHex(rgbToHex(r, g, b));
-    }
   };
 
   useEffect(() => {
@@ -122,8 +137,8 @@ export default function Converter() {
     return () => clearInterval(intervalId);
   }, [clipboardAlert]);
 
-  function copyToclipboard (value: string | undefined) {
-    if(value){
+  function copyToclipboard(value: string | undefined) {
+    if (value) {
       navigator.clipboard.writeText(value);
       setClipboardAlert(true);
     }
@@ -132,16 +147,30 @@ export default function Converter() {
   return (
     <>
       {clipboardAlert && (
-      <div
-        className="fixed bottom-10 right-10 z-[10] rounded bg-black px-6 py-3 text-zinc-100"
-        role="alert">
-        Text copied!
-      </div>
+        <div
+          className="fixed bottom-10 right-10 z-[10] rounded bg-black px-6 py-3 text-zinc-100"
+          role="alert"
+        >
+          Text copied!
+        </div>
       )}
       <h2 className="text-4xl font-bold dark:text-white mb-2">
         RGB to HEX converter
       </h2>
-      <p className="mb-2">Quickly convert colors from rgb(a) to HEX and vice versa.</p>
+      <p className="mb-2">
+        Quickly convert colors from rgb(a) to HEX and vice versa.
+      </p>
+      <div className="flex items-center space-x-2">
+        <input
+          type="checkbox"
+          id="rgba"
+          checked={rgba}
+          onChange={(e) => setRgba(e.target.checked)}
+          className="form-checkbox h-4 w-4 text-blue-500"
+          data-testid="rgba"
+        />
+        <label htmlFor="rgba">Generate rgba code</label>
+      </div>
       <div className="sm:flex gap-3">
         <div className="flex-1 mb-2">
           <label htmlFor="rgb" className={`${labelClass}`}>
@@ -154,9 +183,18 @@ export default function Converter() {
               data-testid="rgb"
               className={`${inputClass} me-1`}
               value={rgb}
-              onChange={(e) => setRgbHandler(e.target.value)}
+              onChange={(e) => {
+                setFieldActive("rgb");
+                setRgbHandler(e.target.value);
+              }}
+              onBlur={setRgbHandlerBlur}
             />
-            <button className={`${buttonClass}`} onClick={() => copyToclipboard(rgb)}>Copy</button>
+            <button
+              className={`${buttonClass}`}
+              onClick={() => copyToclipboard(rgb)}
+            >
+              Copy
+            </button>
           </div>
         </div>
         <div className="flex-1 mb-2">
@@ -170,10 +208,18 @@ export default function Converter() {
               data-testid="hex"
               className={`${inputClass} me-1`}
               value={hex}
-              onChange={(e) => setHexHandler(e.target.value)}
+              onChange={(e) => {
+                setFieldActive("hex");
+                setHexHandler(e.target.value);
+              }}
               maxLength={7}
             />
-            <button className={`${buttonClass}`} onClick={() => copyToclipboard(hex)}>Copy</button>
+            <button
+              className={`${buttonClass}`}
+              onClick={() => copyToclipboard(hex)}
+            >
+              Copy
+            </button>
           </div>
         </div>
       </div>
@@ -192,7 +238,10 @@ export default function Converter() {
                 max="255"
                 className={`${inputClass}`}
                 value={r}
-                onChange={(e) => setRHandler(e.target.value)}
+                onChange={(e) => {
+                  setFieldActive("r");
+                  setRHandler(e.target.value);
+                }}
               />
             </div>
             <div className="flex-1 mb-2">
@@ -207,7 +256,10 @@ export default function Converter() {
                 max="255"
                 className={`${inputClass}`}
                 value={g}
-                onChange={(e) => setGHandler(e.target.value)}
+                onChange={(e) => {
+                  setFieldActive("g");
+                  setGHandler(e.target.value);
+                }}
               />
             </div>
             <div className="flex-1 mb-2">
@@ -222,7 +274,10 @@ export default function Converter() {
                 max="255"
                 className={`${inputClass}`}
                 value={b}
-                onChange={(e) => setBHandler(e.target.value)}
+                onChange={(e) => {
+                  setFieldActive("b");
+                  setBHandler(e.target.value);
+                }}
               />
             </div>
           </div>
@@ -237,7 +292,10 @@ export default function Converter() {
             data-testid="preview"
             className={`${inputClass} p-1 h-10`}
             value={hex}
-            onChange={(e) => setHexHandler(e.target.value)}
+            onChange={(e) => {
+              setFieldActive("preview");
+              setHexHandler(e.target.value);
+            }}
           />
         </div>
       </div>

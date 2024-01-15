@@ -1,4 +1,5 @@
 # Colors
+
 HEX to RGB converter and Contrast Checker
 Live version: https://colors.wyremski.pl
 
@@ -10,6 +11,7 @@ In addition, it allows you to check whether the text and background color compli
 First, run the development server:
 
 ```bash
+npm install
 npm run dev
 ```
 

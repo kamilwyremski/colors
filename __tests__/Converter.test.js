@@ -1,6 +1,13 @@
-import { fireEvent, render, screen, waitFor, act } from "@testing-library/react";
-import Converter from '../pages/component/Converter';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  act,
+} from "@testing-library/react";
+import Converter from "../pages/component/Converter";
 
+let rgba;
 let rgb;
 let hex;
 let r;
@@ -10,6 +17,7 @@ let preview;
 
 beforeEach(() => {
   render(<Converter />);
+  rgba = screen.getByTestId("rgba");
   rgb = screen.getByTestId("rgb");
   hex = screen.getByTestId("hex");
   r = screen.getByTestId("r");
@@ -18,15 +26,31 @@ beforeEach(() => {
   preview = screen.getByTestId("preview");
 });
 
-test('renders Converter correctly', () => {
-  expect(screen.getByText('RGB to HEX converter')).toBeInTheDocument();
+test("renders Converter correctly", () => {
+  expect(screen.getByText("RGB to HEX converter")).toBeInTheDocument();
 });
 
-test('check rgbHandler', async () => {
+test("check rgbaHandler", async () => {
+  await act(async () => {
+    fireEvent.click(rgba);
+  });
+  await waitFor(() => {
+    expect(rgba.checked).toBe(true);
+    expect(rgb).toHaveValue("rgba(255, 255, 255, 1)");
+    expect(hex).toHaveValue("#ffffff");
+    expect(r).toHaveValue(255);
+    expect(g).toHaveValue(255);
+    expect(b).toHaveValue(255);
+    expect(preview).toHaveValue("#ffffff");
+  });
+});
+
+test("check rgbHandler", async () => {
   await act(async () => {
     fireEvent.change(rgb, { target: { value: "rgb(0,0,0)" } });
   });
   await waitFor(() => {
+    expect(rgba.checked).toBe(false);
     expect(rgb).toHaveValue("rgb(0,0,0)");
     expect(hex).toHaveValue("#000000");
     expect(r).toHaveValue(0);
@@ -36,9 +60,9 @@ test('check rgbHandler', async () => {
   });
 });
 
-test('check hexHandler', async () => {
+test("check hexHandler", async () => {
   await act(async () => {
-    fireEvent.change(hex, { target: { value: "00ff00" } });
+    fireEvent.change(hex, { target: { value: "#00ff00" } });
   });
   await waitFor(() => {
     expect(rgb).toHaveValue("rgb(0, 255, 0)");
@@ -50,7 +74,7 @@ test('check hexHandler', async () => {
   });
 });
 
-test('check rHandler', async () => {
+test("check rHandler", async () => {
   await act(async () => {
     fireEvent.change(r, { target: { value: 122 } });
   });
@@ -64,7 +88,7 @@ test('check rHandler', async () => {
   });
 });
 
-test('check gHandler', async () => {
+test("check gHandler", async () => {
   await act(async () => {
     fireEvent.change(g, { target: { value: 77 } });
   });
@@ -78,7 +102,7 @@ test('check gHandler', async () => {
   });
 });
 
-test('check gHandler', async () => {
+test("check gHandler", async () => {
   await act(async () => {
     fireEvent.change(b, { target: { value: 0 } });
   });
