@@ -27,8 +27,23 @@ export default function Converter() {
       : null;
   }
 
-  function isHex(hex: string | undefined): boolean {
-    return hex ? /^#([0-9A-F]{3}){1,2}$/i.test(hex) : false;
+  function toHexSix(hex: string | undefined): string {
+    if (hex && /^#([0-9A-F]{3}){1,2}$/i.test(hex)) {
+      if (hex.replace(/#/, "").length === 3) {
+        return (
+          "#" +
+          hex
+            .replace(/#/, "")
+            .split("")
+            .map(function (hex) {
+              return hex + hex;
+            })
+            .join("")
+        );
+      }
+      return hex;
+    }
+    return "#000000";
   }
 
   const componentToHex = (c: number) => {
@@ -296,7 +311,7 @@ export default function Converter() {
             id="preview"
             data-testid="preview"
             className={`${inputClass} p-1 h-10`}
-            value={isHex(hex) ? hex : "#000"}
+            value={toHexSix(hex)}
             onChange={(e) => {
               setFieldActive("preview");
               setHexHandler(e.target.value);
