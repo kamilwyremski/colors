@@ -51,14 +51,9 @@ export default function Converter() {
     return hex.length == 1 ? "0" + hex : hex;
   };
 
-  const rgbToHex = useCallback(
-    (r: number, g: number, b: number) =>
-      "#" + componentToHex(r) + componentToHex(g) + componentToHex(b),
-    []
-  );
+  const rgbToHex = useCallback((r: number, g: number, b: number) => "#" + componentToHex(r) + componentToHex(g) + componentToHex(b), []);
 
-  const isNumber = (value?: string | number): boolean =>
-    value != null && value !== "" && !isNaN(Number(value.toString()));
+  const isNumber = (value?: string | number): boolean => value != null && value !== "" && !isNaN(Number(value.toString()));
 
   useEffect(() => {
     if (fieldActive !== "rgb") {
@@ -69,20 +64,14 @@ export default function Converter() {
       }
     }
     if (fieldActive !== "hex") {
-      setHex(
-        isNumber(r) && isNumber(g) && isNumber(b)
-          ? rgbToHex(r || 0, g || 0, b || 0)
-          : undefined
-      );
+      setHex(isNumber(r) && isNumber(g) && isNumber(b) ? rgbToHex(r || 0, g || 0, b || 0) : undefined);
     }
   }, [rgba, r, g, b, a, rgbToHex, fieldActive]);
 
   const setRgbHandler = (value: string) => {
     setRgb(value);
     const nums = value
-      .match(
-        /^rgba?\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*(\d+(?:\.\d+)?)\s*)?\)$/i
-      )
+      .match(/^rgba?\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*(\d+(?:\.\d+)?)\s*)?\)$/i)
       ?.filter((n) => isNumber(n))
       .map((n) => Number(n))
       .filter((n) => n >= 0 && n <= 255);
@@ -164,19 +153,12 @@ export default function Converter() {
   return (
     <>
       {clipboardAlert && (
-        <div
-          className="fixed bottom-10 right-10 z-[10] rounded bg-black px-6 py-3 text-zinc-100"
-          role="alert"
-        >
+        <div className="fixed bottom-10 right-10 z-[10] rounded bg-black px-6 py-3 text-zinc-100" role="alert">
           Text copied!
         </div>
       )}
-      <h2 className="text-4xl font-bold dark:text-white mb-2">
-        RGB to HEX converter
-      </h2>
-      <p className="mb-2">
-        Quickly convert colors from rgb(a) to HEX and vice versa.
-      </p>
+      <h2 className="text-4xl font-bold dark:text-white mb-2">RGB to HEX converter</h2>
+      <p className="mb-2">Quickly convert colors from rgb(a) to HEX and vice versa.</p>
       <div className="flex items-center space-x-2">
         <input
           type="checkbox"
@@ -209,10 +191,7 @@ export default function Converter() {
               }}
               onBlur={setRgbHandlerBlur}
             />
-            <button
-              className={`${buttonClass}`}
-              onClick={() => copyToclipboard(rgb)}
-            >
+            <button className={`${buttonClass}`} onClick={() => copyToclipboard(rgb)} type="button">
               Copy
             </button>
           </div>
@@ -234,10 +213,7 @@ export default function Converter() {
               }}
               maxLength={7}
             />
-            <button
-              className={`${buttonClass}`}
-              onClick={() => copyToclipboard(hex)}
-            >
+            <button className={`${buttonClass}`} onClick={() => copyToclipboard(hex)} type="button">
               Copy
             </button>
           </div>

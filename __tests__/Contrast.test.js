@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor, act } from "@testing-library/react";
-import Contrast from '../pages/component/Contrast';
+import Contrast from "../pages/component/Contrast";
 
 let foreground;
 let contrastRatio;
@@ -8,6 +8,10 @@ let aaNormal;
 let aaaNormal;
 let aaLarge;
 let aaaLarge;
+let foregroundDecreaseBrightness;
+let foregroundIncreaseBrightness;
+let backgroundDecreaseBrightness;
+let backgroundIncreaseBrightness;
 
 beforeEach(() => {
   render(<Contrast />);
@@ -18,13 +22,17 @@ beforeEach(() => {
   aaaNormal = screen.getByTestId("aaa-normal");
   aaLarge = screen.getByTestId("aa-large");
   aaaLarge = screen.getByTestId("aaa-large");
+  foregroundDecreaseBrightness = screen.getByTestId("foreground-decrease-brightness");
+  foregroundIncreaseBrightness = screen.getByTestId("foreground-increase-brightness");
+  backgroundDecreaseBrightness = screen.getByTestId("background-decrease-brightness");
+  backgroundIncreaseBrightness = screen.getByTestId("background-increase-brightness");
 });
 
-test('renders Contrast correctly', () => {
-  expect(screen.getByText('Contrast Checker')).toBeInTheDocument();
+test("renders Contrast correctly", () => {
+  expect(screen.getByText("Contrast Checker")).toBeInTheDocument();
 });
 
-test('check setForegroundHandler', async () => {
+test("check setForegroundHandler", async () => {
   await act(async () => {
     fireEvent.change(foreground, { target: { value: "000" } });
   });
@@ -33,7 +41,7 @@ test('check setForegroundHandler', async () => {
   });
 });
 
-test('check setForegroundHandler invalid color', async () => {
+test("check setForegroundHandler invalid color", async () => {
   await act(async () => {
     fireEvent.change(foreground, { target: { value: "abcd" } });
   });
@@ -42,7 +50,7 @@ test('check setForegroundHandler invalid color', async () => {
   });
 });
 
-test('check seBackgroundHandler', async () => {
+test("check seBackgroundHandler", async () => {
   await act(async () => {
     fireEvent.change(background, { target: { value: "fff" } });
   });
@@ -51,7 +59,7 @@ test('check seBackgroundHandler', async () => {
   });
 });
 
-test('check contrast 1', async () => {
+test("check contrast 1", async () => {
   await act(async () => {
     fireEvent.change(foreground, { target: { value: "#000" } });
     fireEvent.change(background, { target: { value: "#fff" } });
@@ -65,7 +73,7 @@ test('check contrast 1', async () => {
   });
 });
 
-test('check contrast 2', async () => {
+test("check contrast 2", async () => {
   await act(async () => {
     fireEvent.change(foreground, { target: { value: "#00FFFF" } });
     fireEvent.change(background, { target: { value: "#fff" } });
@@ -79,7 +87,7 @@ test('check contrast 2', async () => {
   });
 });
 
-test('check contrast 3', async () => {
+test("check contrast 3", async () => {
   await act(async () => {
     fireEvent.change(foreground, { target: { value: "#0044FF" } });
     fireEvent.change(background, { target: { value: "#fff" } });
@@ -93,7 +101,7 @@ test('check contrast 3', async () => {
   });
 });
 
-test('check contrast 4', async () => {
+test("check contrast 4", async () => {
   await act(async () => {
     fireEvent.change(foreground, { target: { value: "#0676e0" } });
     fireEvent.change(background, { target: { value: "#ffff11" } });
@@ -104,5 +112,45 @@ test('check contrast 4', async () => {
     expect(aaLarge).toHaveTextContent("OK");
     expect(aaaLarge).toHaveTextContent("FAIL");
     expect(contrastRatio).toHaveTextContent("4.18:1");
+  });
+});
+
+test("foreground decrease brightness", async () => {
+  await act(async () => {
+    fireEvent.change(foreground, { target: { value: "#0676e0" } });
+    fireEvent.click(foregroundDecreaseBrightness);
+  });
+  await waitFor(() => {
+    expect(foreground).toHaveValue("#005dc7");
+  });
+});
+
+test("foreground increase brightness", async () => {
+  await act(async () => {
+    fireEvent.change(foreground, { target: { value: "#0676e0" } });
+    fireEvent.click(foregroundIncreaseBrightness);
+  });
+  await waitFor(() => {
+    expect(foreground).toHaveValue("#2090fa");
+  });
+});
+
+test("background decrease brightness", async () => {
+  await act(async () => {
+    fireEvent.change(background, { target: { value: "#FF0000" } });
+    fireEvent.click(backgroundDecreaseBrightness);
+  });
+  await waitFor(() => {
+    expect(background).toHaveValue("#e60000");
+  });
+});
+
+test("background increase brightness", async () => {
+  await act(async () => {
+    fireEvent.change(background, { target: { value: "#FF0000" } });
+    fireEvent.click(backgroundIncreaseBrightness);
+  });
+  await waitFor(() => {
+    expect(background).toHaveValue("#ff1a1a");
   });
 });
