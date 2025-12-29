@@ -141,7 +141,7 @@ test("background decrease brightness", async () => {
     fireEvent.click(backgroundDecreaseBrightness);
   });
   await waitFor(() => {
-    expect(background).toHaveValue("#e60000");
+    expect(background).toHaveValue("#f50000");
   });
 });
 
@@ -151,6 +151,6 @@ test("background increase brightness", async () => {
     fireEvent.click(backgroundIncreaseBrightness);
   });
   await waitFor(() => {
-    expect(background).toHaveValue("#ff1a1a");
+    expect(background).toHaveValue("#ff0a0a");
   });
 });
