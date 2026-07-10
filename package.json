@@ -1,6 +1,6 @@
 {
   "name": "colors",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "private": false,
   "description": "HEX to RGB converter and Contrast Checker",
   "repository": {

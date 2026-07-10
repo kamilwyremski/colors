@@ -33,7 +33,7 @@ export default function Home() {
           </a>
         </p>
         <p className="text-sm">
-          Project 2023 - 2024 by{" "}
+          Project 2023 - 2026 by{" "}
           <a href="http://wyremski.pl/en" title="Web Developer">
             Kamil Wyremski
           </a>

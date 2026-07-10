@@ -23,11 +23,6 @@ export default function Document() {
           href="/icons/icon-152x152.png"
         />
         <link rel="manifest" href="/manifest.json" />
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7473594052398878"
-          crossOrigin="anonymous"
-        ></script>
       </Head>
       <body>
         <Main />
